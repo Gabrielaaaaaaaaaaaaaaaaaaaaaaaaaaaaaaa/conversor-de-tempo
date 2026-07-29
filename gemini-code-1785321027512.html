@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversor de Tempo</title>
+  
+  <style>
+    /* --- ESTILOS BASE (MOBILE-FIRST) --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%; /* Ocupa a largura total no celular */
+      max-width: 500px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .calculator {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    label {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    input {
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    button {
+      padding: 0.8rem;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #004b99;
+    }
+
+    .resultado {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background-color: #e6f2ff;
+      border-left: 4px solid #0066cc;
+      border-radius: 4px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* --- MEDIA QUERIES (DESKTOP E TABLETS) --- */
+    @media (min-width: 600px) {
+      .container {
+        padding: 2.5rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .calculator {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+      }
+
+      label {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <h1>Conversor de Tempo</h1>
+    
+    <div class="calculator">
+      <label for="segundos">Digite o tempo em segundos:</label>
+      <input type="number" id="segundos" placeholder="Ex: 3665" min="0">
+      <button id="btn-converter">Converter</button>
+    </div>
+
+    <div id="resultado" class="resultado hidden">
+      <h2>Resultado:</h2>
+      <p id="texto-resultado"></p>
+    </div>
+  </main>
+
+  <script>
+    // Seleção dos elementos do HTML
+    const inputSegundos = document.getElementById('segundos');
+    const btnConverter = document.getElementById('btn-converter');
+    const divResultado = document.getElementById('resultado');
+    const textoResultado = document.getElementById('texto-resultado');
+
+    // Lógica matemática de conversão
+    function converterTempo(segundosTotais) {
+      const horas = Math.floor(segundosTotais / 3600);
+      const segundosRestantes = segundosTotais % 3600;
+      const minutos = Math.floor(segundosRestantes / 60);
+      const segundos = segundosRestantes % 60;
+
+      return { horas, minutos, segundos };
+    }
+
+    // Interação dinâmica com a página
+    btnConverter.addEventListener('click', () => {
+      const valorInput = parseInt(inputSegundos.value);
+
+      if (isNaN(valorInput) || valorInput < 0) {
+        textoResultado.textContent = 'Por favor, insira um número válido e maior ou igual a zero.';
+        divResultado.classList.remove('hidden');
+        return;
+      }
+
+      const { horas, minutos, segundos } = converterTempo(valorInput);
+
+      textoResultado.innerHTML = `<strong>${valorInput}</strong> segundos equivalem a:<br>` +
+        `• <strong>${horas}</strong> hora(s)<br>` +
+        `• <strong>${minutos}</strong> minuto(s)<br>` +
+        `• <strong>${segundos}</strong> segundo(s)`;
+
+      divResultado.classList.remove('hidden');
+    });
+  </script>
+
+</body>
+</html>
